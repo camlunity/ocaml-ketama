@@ -7,14 +7,14 @@
 
 let uint32_of_byte b = Uint32.of_int32 (Int32.of_int (Char.code b))
 
-type mcs = { point: Uint32.t; ip: string }
+type node = { point: Uint32.t; ip: string }
 
 type server_info = { addr: string; memory: int }
 
-type continuum = { num_points: int; array: mcs array }
+type continuum = { num_points: int; nodes: node array }
 
 
-let cmp_mcs a b =
+let cmp_nodes a b =
   if Uint32.( < ) a.point b.point then 1
   else
     if Uint32.( > ) a.point b.point
@@ -22,7 +22,7 @@ let cmp_mcs a b =
     else 0
 
 
-let load_mcs servers =
+let load_nodes servers =
   let ls = Array.length servers in
   let total_mem = Array.fold_right (fun x acc -> acc + x.memory) servers 0 in
   let ftotal_mem = float_of_int total_mem in
@@ -44,12 +44,12 @@ let load_mcs servers =
 
 
 let create_continuum servers =
-  let mcs = load_mcs servers in
-  let () = Array.sort cmp_mcs mcs in
-  let num = Array.length mcs in
+  let nodes = load_nodes servers in
+  let () = Array.sort cmp_nodes nodes in
+  let num = Array.length nodes in
   if num == 0
   then failwith "No elements in continuum!"
-  else {num_points=num; array=mcs}
+  else {num_points=num; nodes=nodes}
 
 
 let hash str =
@@ -60,7 +60,7 @@ let hash str =
 
 let search_server c ?(lowp=0) ?(highp=c.num_points) k =
   let h = hash k
-  and a = c.array in
+  and a = c.nodes in
   let rec search l u =
     let m = (l + u) / 2 in
     if m == c.num_points
