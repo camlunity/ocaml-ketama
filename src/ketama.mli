@@ -13,5 +13,5 @@ val hash : string -> Uint32.uint32
 
 val search_server : continuum -> ?lowp:int -> ?highp:int -> string -> mcs
 
-val get_server : string -> continuum -> mcs
+val get_server : continuum -> string -> mcs
 

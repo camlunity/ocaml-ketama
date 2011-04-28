@@ -74,9 +74,8 @@ let search_server c ?(lowp=0) ?(highp=c.num_points) k =
     )
   in search lowp highp
 
-let get_server key c =
+let get_server c key =
   search_server c key
-
 
 let safe_of_string s =
   try
