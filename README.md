@@ -2,6 +2,7 @@
 # ocaml-ketama
 
 ocaml-ketama is a consistent hashing library written in Ocaml.
+This is a fork of http://code.google.com/p/ocaml-ketama/
 
 # Build
 
