@@ -1,5 +1,5 @@
 (* OASIS_START *)
-(* DO NOT EDIT (digest: cb72e3647e64aa28733a87dbe70225c4) *)
+(* DO NOT EDIT (digest: ad8842b6bbdacc60237552f2ad35ebdb) *)
 This is the INSTALL file for the ocaml-ketama distribution.
 
 This package uses OASIS to generate its build system. See section OASIS for
@@ -12,6 +12,7 @@ In order to compile this package, you will need:
 * ocaml
 * findlib
 * uint for library ketama
+* quickcheck for executable test
 
 Installing
 ==========
@@ -35,3 +36,9 @@ configuration file. The generated setup only depends on the standard OCaml
 installation: no additional library is required.
 
 (* OASIS_STOP *)
+
+Notes
+=====
+
+Use --disable-tests if you don't want to build tests (with additional
+dependency -- quickcheck).

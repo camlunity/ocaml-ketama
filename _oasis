@@ -7,6 +7,10 @@ License:     BSD4
 Plugins:     DevFiles (0.2), META (0.2), StdFiles (0.2)
 BuildTools:  ocamlbuild
 
+Flag tests
+  Description: Build tests
+  Default: true
+
 Library ketama
   Path:            src
   Modules:         Ketama
@@ -16,11 +20,13 @@ Library ketama
 
 
 Executable test
+  Build$:          flag(tests)
+  Install$:        flag(tests)
   Path:            tests
   Install:         false
   MainIs:          test.ml
   CompiledObject:  best
-  BuildDepends:    ketama
+  BuildDepends:    ketama, quickcheck
   NativeOpt:       -w @a -g
   ByteOpt:         -w @a
 

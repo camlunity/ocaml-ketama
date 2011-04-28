@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: fe7489e0ae4cbc864dee79117d9e86f7)
+# DO NOT EDIT (digest: b124e646f56725e74a2a775279d65622)
 # Library ketama
 "src": include
 <src/ketama.{cma,cmxa}>: oasis_library_ketama_byte
@@ -16,7 +16,9 @@
 <tests/test.{native,byte}>: use_ketama
 <tests/test.{native,byte}>: pkg_uint.uint32
 <tests/test.{native,byte}>: pkg_str
+<tests/test.{native,byte}>: pkg_quickcheck
 <tests/*.ml{,i}>: use_ketama
 <tests/*.ml{,i}>: pkg_uint.uint32
 <tests/*.ml{,i}>: pkg_str
+<tests/*.ml{,i}>: pkg_quickcheck
 # OASIS_STOP
