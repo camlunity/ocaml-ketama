@@ -1,0 +1,6 @@
+(* OASIS_START *)
+(* DO NOT EDIT (digest: 8ee8c583944a6697d9cbdd160ab82120) *)
+Authors of ocaml-ketama
+Roma Sokolov
+Andrey Sidorenko
+(* OASIS_STOP *)

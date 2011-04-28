@@ -1,0 +1,31 @@
+OASISFormat: 0.2
+Name:        ocaml-ketama
+Version:     0.0.3
+Synopsis:    ocaml-ketama is consistent hashing library written in ocaml
+Authors:     Roma Sokolov, Andrey Sidorenko
+License:     BSD4
+Plugins:     DevFiles (0.2), META (0.2), StdFiles (0.2)
+BuildTools:  ocamlbuild
+
+Library ketama
+  Path:            src
+  Modules:         Ketama
+  BuildDepends:    str, uint.uint32
+  NativeOpt:       -w @a
+  ByteOpt:         -w @a
+
+
+Executable test
+  Path:            tests
+  Install:         false
+  MainIs:          test.ml
+  CompiledObject:  best
+  BuildDepends:    ketama
+  NativeOpt:       -w @a -g
+  ByteOpt:         -w @a
+
+
+SourceRepository github
+  Type:     git
+  Location: git://github.com/camlunity/ocaml-ketama.git
+  Browser:  https://github.com/ocaml-ketama/cobson

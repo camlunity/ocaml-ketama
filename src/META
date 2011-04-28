@@ -1,0 +1,10 @@
+# OASIS_START
+# DO NOT EDIT (digest: a17a28d8a6e53755cb1c994ffa2aad70)
+version = "0.0.3"
+description = "ocaml-ketama is consistent hashing library written in ocaml"
+requires = "str uint.uint32"
+archive(byte) = "ketama.cma"
+archive(native) = "ketama.cmxa"
+exists_if = "ketama.cma"
+# OASIS_STOP
+
