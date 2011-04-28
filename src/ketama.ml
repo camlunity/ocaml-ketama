@@ -47,7 +47,9 @@ let create_continuum servers =
   let mcs = load_mcs servers in
   let () = Array.sort cmp_mcs mcs in
   let num = Array.length mcs in
-  {num_points=num; array=mcs}
+  if num == 0
+  then failwith "No elements in continuum!"
+  else {num_points=num; array=mcs}
 
 
 let hash str =
