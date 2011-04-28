@@ -1,9 +1,9 @@
 
-type mcs = { point : Uint32.t; ip : string; }
+type mcs = private { point : Uint32.t; ip : string; }
 
 type server_info = { addr : string; memory : int; }
 
-type continuum = { num_points : int; array : mcs array; }
+type continuum = private { num_points : int; array : mcs array; }
 
 val create_continuum : server_info array -> continuum
 
