@@ -15,11 +15,7 @@ type continuum = { num_points: int; nodes: node array }
 
 
 let cmp_nodes a b =
-  if Uint32.( < ) a.point b.point then 1
-  else
-    if Uint32.( > ) a.point b.point
-    then -1
-    else 0
+  compare a.point b.point
 
 
 let load_nodes servers =
@@ -68,7 +64,7 @@ let search_server c ?(lowp=0) ?(highp=c.num_points) k =
     else (
       let mv = a.(m).point in
       let mv1 = a.(m - 1).point in
-      match (Uint32.( <= ) h mv, Uint32.( > ) h mv1) with
+      match (h <= mv, h > mv1) with
         | (true, true) -> a.(m) (* between *)
         | (false, true)  -> search (m + 1) u (* before m - 1 *)
         | (false, false) -> search l (m - 1) (* after m *)
