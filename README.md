@@ -1,7 +1,7 @@
-
 # ocaml-ketama
 
 ocaml-ketama is a consistent hashing library written in Ocaml.
+
 This is a fork of http://code.google.com/p/ocaml-ketama/
 
 # Build
@@ -20,7 +20,7 @@ sloccount results:
 * ocaml-ketama: ketama.ml and ketama.mli
 
         SLOC    Directory       SLOC-by-Language (Sorted)
-        137     src         ml=98
+        137     src             ml=98
 
 # License
 
