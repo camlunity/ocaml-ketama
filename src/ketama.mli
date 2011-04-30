@@ -11,7 +11,5 @@ val create_continuum_from_file : ?partitions:float -> string -> continuum
 
 val hash : string -> Uint32.uint32
 
-val search_server : continuum -> ?lowp:int -> ?highp:int -> string -> node
-
 val get_server : continuum -> string -> node
 

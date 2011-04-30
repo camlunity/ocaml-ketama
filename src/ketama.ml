@@ -17,21 +17,22 @@ let load_nodes ?(partitions=40.) servers =
   let total_mem = Array.fold_right (fun x acc -> acc + x.power) servers 0 in
   let ftotal_mem = float_of_int total_mem in
   let lr = Uint32.logor in
+  let z digest h =
+    let t x h shift =
+      Uint32.shift_left (uint32_of_byte digest.[x + h * 4]) shift in
+    lr (lr (lr (t 3 h 24) (t 2 h 16)) (t 1 h 8)) (t 0 h 0) in
+
   Array.fold_right (fun srv acc ->
     let pct = (float_of_int srv.power) /. ftotal_mem in
     let ks = int_of_float (floor (pct *. partitions *. (float_of_int ls))) in
     Array.append acc
       (Array.init (ks * 4) (fun i ->
-        let ss = Printf.sprintf "%s-%d" srv.addr (i mod ks) in
+        let ss = Printf.sprintf "%s-%d" srv.addr (i / 4) in
         let digest = Digest.string ss in
-        let t x h shift =
-          Uint32.shift_left (uint32_of_byte digest.[x + h * 4]) shift in
-        let z h =
-          lr (lr (lr (t 3 h 24) (t 2 h 16)) (t 1 h 8)) (t 0 h 0) in
-        {point=z (i mod 4); ip = srv.addr}
+        let z' = z digest in
+        {point=z' (i mod 4); ip = srv.addr}
        ))
   ) servers [||]
-
 
 let create_continuum ?(partitions=40.) servers  =
   let nodes = load_nodes ~partitions:partitions servers in
@@ -48,26 +49,29 @@ let hash str =
   let t x y = Uint32.shift_left (uint32_of_byte s.[x]) y in
     lr (lr (lr (t 3 24) (t 2 16)) (t 1 8)) (t 0 0)
 
-let search_server c ?(lowp=0) ?(highp=c.num_points) k =
-  let h = hash k
-  and a = c.nodes in
+let get_server c k =
+  let lowp = 0 in
+  let highp = c.num_points in
+  let h = hash k in
+  let a = c.nodes in
   let rec search l u =
     let m = (l + u) / 2 in
-    if m == c.num_points
+    if m = c.num_points
     then a.(0)
     else (
       let mv = a.(m).point in
-      let mv1 = a.(m - 1).point in
-      match (h <= mv, h > mv1) with
+      let mv1 = if m=0 then Uint32.zero else a.(m - 1).point in
+      match ( mv1 < h, h <= mv) with
         | (true, true) -> a.(m) (* between *)
-        | (false, true)  -> search (m + 1) u (* before m - 1 *)
-        | (false, false) -> search l (m - 1) (* after m *)
-        | (true, false) -> a.(0)
+        | (true, false)  -> search (m + 1) u (* before m - 1 *)
+        | (false, true) -> search l (m - 1) (* after m *)
+        | (false, false) -> a.(0)
     )
   in search lowp highp
 
-let get_server c key =
-  search_server c key
+exception Return of node
+let return n = raise (Return n)
+
 
 let safe_of_string s =
   try
