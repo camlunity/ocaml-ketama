@@ -1,10 +1,4 @@
 
-(*
-  Note: use slightly updated version of ocaml-uint library from
-  http://github.com/gene9/ocaml-uint.
-*)
-
-
 let uint32_of_byte b = Uint32.of_int32 (Int32.of_int (Char.code b))
 
 type node = { point: Uint32.t; ip: string }
