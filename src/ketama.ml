@@ -18,14 +18,14 @@ let cmp_nodes a b =
   compare a.point b.point
 
 
-let load_nodes servers =
+let load_nodes ?(partitions=40.) servers =
   let ls = Array.length servers in
   let total_mem = Array.fold_right (fun x acc -> acc + x.power) servers 0 in
   let ftotal_mem = float_of_int total_mem in
   let lr = Uint32.logor in
   Array.fold_right (fun srv acc ->
-    let ks = int_of_float (floor (pct *. 40.0 *. (float_of_int ls))) in
     let pct = (float_of_int srv.power) /. ftotal_mem in
+    let ks = int_of_float (floor (pct *. partitions *. (float_of_int ls))) in
     Array.append acc
       (Array.init (ks * 4) (fun i ->
         let ss = Printf.sprintf "%s-%d" srv.addr (i mod ks) in
@@ -39,8 +39,8 @@ let load_nodes servers =
   ) servers [||]
 
 
-let create_continuum servers =
-  let nodes = load_nodes servers in
+let create_continuum ?(partitions=40.) servers  =
+  let nodes = load_nodes ~partitions:partitions servers in
   let () = Array.sort cmp_nodes nodes in
   let num = Array.length nodes in
   if num == 0
@@ -110,7 +110,7 @@ let read_server_definitions filename =
     failwith (Printf.sprintf "Unable to open file %s" filename)
 
 
-let create_continuum_from_file filename =
+let create_continuum_from_file ?(partitions=40.0) filename =
   let servers = Array.of_list (read_server_definitions filename) in
-  create_continuum servers
+  create_continuum ~partitions:partitions servers
 
