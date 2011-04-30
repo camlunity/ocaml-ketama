@@ -1,7 +1,7 @@
 
 type node = private { point : Uint32.t; ip : string; }
 
-type server_info = { addr : string; memory : int; }
+type server_info = { addr : string; power : int; }
 
 type continuum = private { num_points : int; nodes : node array; }
 

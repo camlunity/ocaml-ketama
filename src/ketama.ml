@@ -9,7 +9,7 @@ let uint32_of_byte b = Uint32.of_int32 (Int32.of_int (Char.code b))
 
 type node = { point: Uint32.t; ip: string }
 
-type server_info = { addr: string; memory: int }
+type server_info = { addr: string; power: int }
 
 type continuum = { num_points: int; nodes: node array }
 
@@ -20,12 +20,12 @@ let cmp_nodes a b =
 
 let load_nodes servers =
   let ls = Array.length servers in
-  let total_mem = Array.fold_right (fun x acc -> acc + x.memory) servers 0 in
+  let total_mem = Array.fold_right (fun x acc -> acc + x.power) servers 0 in
   let ftotal_mem = float_of_int total_mem in
   let lr = Uint32.logor in
   Array.fold_right (fun srv acc ->
-    let pct = (float_of_int srv.memory) /. ftotal_mem in
     let ks = int_of_float (floor (pct *. 40.0 *. (float_of_int ls))) in
+    let pct = (float_of_int srv.power) /. ftotal_mem in
     Array.append acc
       (Array.init (ks * 4) (fun i ->
         let ss = Printf.sprintf "%s-%d" srv.addr (i mod ks) in
@@ -78,7 +78,7 @@ let get_server c key =
 let safe_of_string s =
   try
     int_of_string s
-  with Failure _ -> failwith (Printf.sprintf "Invalid memory value: %s" s)
+  with Failure _ -> failwith (Printf.sprintf "Invalid power value: %s" s)
 
 
 let fold_file ?(func = fun x y -> x::y) filename =
@@ -98,7 +98,7 @@ let read_server_definitions filename =
   let re = Str.regexp "[ \t]" in
   let mapper x =
     match Str.split re x with
-      | addr::memory::[] -> {addr=addr; memory=safe_of_string memory }
+      | addr::power::[] -> {addr=addr; power=safe_of_string power }
       | _ -> failwith (Printf.sprintf "Invalid config string: %s" x)
   in
   let filt s = String.length s = 0 || s.[0] != '#'

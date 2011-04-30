@@ -10,7 +10,7 @@ let cls = quickCheck testable_string_to_bool
 
 let test filename =
   let c_many = create_continuum_from_file filename in
-  let c_one = create_continuum [| {addr="127.0.0.1"; memory=100} |] in
+  let c_one = create_continuum [| {addr="127.0.0.1"; power=100} |] in
   let prop_one_for_one s =
     let mcs = get_server c_one s in
     mcs.ip = "127.0.0.1"
