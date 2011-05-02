@@ -1,6 +1,4 @@
 
-let uint32_of_byte b = Uint32.of_int32 (Int32.of_int (Char.code b))
-
 type node = { point: Uint32.t; ip: string }
 
 type server_info = { addr: string; power: int }
@@ -12,6 +10,9 @@ let cmp_nodes a b =
   compare a.point b.point
 
 
+let uint32_of_byte b = Uint32.of_int32 (Int32.of_int (Char.code b))
+
+
 let load_nodes ?(partitions=40.) servers =
   let ls = Array.length servers in
   let total_mem = Array.fold_right (fun x acc -> acc + x.power) servers 0 in
@@ -21,7 +22,6 @@ let load_nodes ?(partitions=40.) servers =
     let t x h shift =
       Uint32.shift_left (uint32_of_byte digest.[x + h * 4]) shift in
     lr (lr (lr (t 3 h 24) (t 2 h 16)) (t 1 h 8)) (t 0 h 0) in
-
   Array.fold_right (fun srv acc ->
     let pct = (float_of_int srv.power) /. ftotal_mem in
     let ks = int_of_float (floor (pct *. partitions *. (float_of_int ls))) in
@@ -33,6 +33,7 @@ let load_nodes ?(partitions=40.) servers =
         {point=z' (i mod 4); ip = srv.addr}
        ))
   ) servers [||]
+
 
 let create_continuum ?(partitions=40.) servers  =
   let nodes = load_nodes ~partitions:partitions servers in
