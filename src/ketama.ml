@@ -69,10 +69,6 @@ let get_server c k =
     )
   in search lowp highp
 
-exception Return of node
-let return n = raise (Return n)
-
-
 let safe_of_string s =
   try
     int_of_string s
