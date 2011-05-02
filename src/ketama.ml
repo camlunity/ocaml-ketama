@@ -49,7 +49,20 @@ let hash str =
   let t x y = Uint32.shift_left (uint32_of_byte s.[x]) y in
     lr (lr (lr (t 3 24) (t 2 16)) (t 1 8)) (t 0 0)
 
-let get_server c k =
+
+let cycle_sub arr start len =
+  let length = Array.length arr in
+  if (start + len <= length ) then Array.sub arr start len
+  else (
+    let sb = length - start in
+    let rest = len - sb in
+    let fst = Array.sub arr start sb in
+    let snd = Array.sub arr 0 rest in
+    Array.append fst snd
+  )
+
+
+let get_n_servers c n k =
   let lowp = 0 in
   let highp = c.num_points in
   let h = hash k in
@@ -57,17 +70,22 @@ let get_server c k =
   let rec search l u =
     let m = (l + u) / 2 in
     if m = c.num_points
-    then a.(0)
+    then cycle_sub a 0 n
     else (
       let mv = a.(m).point in
       let mv1 = if m=0 then Uint32.zero else a.(m - 1).point in
       match ( mv1 < h, h <= mv) with
-        | (true, true) -> a.(m) (* between *)
+        | (true, true) -> cycle_sub a m n (* between *)
         | (true, false)  -> search (m + 1) u (* before m - 1 *)
         | (false, true) -> search l (m - 1) (* after m *)
-        | (false, false) -> a.(0)
+        | (false, false) -> cycle_sub a 0 n
     )
   in search lowp highp
+
+
+let get_server c k =
+  (get_n_servers c 1 k).(0)
+
 
 let safe_of_string s =
   try

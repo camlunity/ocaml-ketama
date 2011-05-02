@@ -20,8 +20,13 @@ let test filename =
     let mcs2 = get_server c_many s in
     mcs1 == mcs2
   in
+  let prop_n_servs s =
+    let arr = get_n_servers c_many 3 s in
+    Array.length arr = 3
+  in
   let () = cls prop_one_for_one in
   let () = cls prop_ident_for_equal in
+  let () = cls prop_n_servs in
   ()
 
 

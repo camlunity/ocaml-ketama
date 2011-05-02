@@ -13,3 +13,5 @@ val hash : string -> Uint32.uint32
 
 val get_server : continuum -> string -> node
 
+val get_n_servers : continuum -> int -> string -> node array
+
